@@ -85,13 +85,15 @@ int main(void)
   P2DIR = 0xFF;                             // All P2.x outputs
   P2OUT = 0;                                // All P2.x reset
 
-  while(1)
+
+  while(1)  //loop repeats forever
   {
-    int i;
+    int i;                                  //integer needed for creating time in between blinks
     P1OUT |= 0x01;                          // Set P1.0 LED on
-    for (i = 5000; i>0; i--);               // Delay
+    for (i = 5000; i>0; i--);               // Do something unproductive to create noticable time in between blinks (Delay)
     P1OUT &= ~0x01;                         // Reset P1.0 LED off
     __bis_SR_register(LPM3_bits + GIE);     // Enter LPM3
+    for (i = 5000; i>0; i--);               // Do something unproductive to create noticable time in between blinks (Delay)
   }
 }
 
