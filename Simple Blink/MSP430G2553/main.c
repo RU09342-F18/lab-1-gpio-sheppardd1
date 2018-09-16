@@ -74,20 +74,19 @@
 //original name: msp430g2xx3_lpm3.c
 //changes made: disabled WDT, made blinking synchronous (LED time on = LED time off)
 
-#include <msp430.h>
-#include <msp430g2553.h>
+#include <msp430.h>         //include header file for this launchpad family
 
 int main(void)
 {
     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
-    BCSCTL1 = CALBC1_1MHZ;
+    BCSCTL1 = CALBC1_1MHZ;          //
     DCOCTL = CALDCO_1MHZ;
     P1DIR = 0xFF;                   // All P1.x outputs set to 1
     P1OUT = 0;                      // All P1.x reset to 0
     P2DIR = 0xFF;                   // All P2.x outputs set to 1
     P2OUT = 0;                      // All P2.x reset to 0
     while(1){
-        P1OUT ^= 0x01;              // Set P1.0 LED on
-        __delay_cycles(500000);     // Do something unproductive to create noticeable time in between blinks (Delay)
+        P1OUT ^= 0x01;              // Invert value of P1OUT (the LED)
+        __delay_cycles(500000);     // Set delay to 1/2 second (LED is on for 1/2 second and then off for 1/2 second)
     }
 }
