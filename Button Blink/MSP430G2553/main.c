@@ -8,5 +8,8 @@ int main(void)
 {
 	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 	
+	if(P1OUT == )
+	P1OUT ^= 0x01;
+
 	return 0;
 }
