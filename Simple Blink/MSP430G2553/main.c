@@ -70,42 +70,24 @@
 
 
 
-//Found in TI Resource Explorer
+//Adapted from code found in TI Resource Explorer
 //original name: msp430g2xx3_lpm3.c
-
-//TODO: make duty cycle 50% (symmetrical on and off)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//changes made: disabled WDT, made blinking synchronous (LED time on = LED time off)
 
 #include <msp430.h>
+#include <msp430g2553.h>
 
 int main(void)
 {
-  BCSCTL1 |= DIVA_2;                        // ACLK/4
-  WDTCTL = WDT_ADLY_1000;                   // WDT 1s/4 interval timer
-  IE1 |= WDTIE;                             // Enable WDT interrupt
-  P1DIR = 0xFF;                             // All P1.x outputs
-  P1OUT = 0;                                // All P1.x reset
-  P2DIR = 0xFF;                             // All P2.x outputs
-  P2OUT = 0;                                // All P2.x reset
-
-
-  while(1)  //loop repeats forever
-  {
-    int i;                                  //integer needed for creating time in between blinks
-    P1OUT ^= 0x01;                          // Set P1.0 LED on
-    for (i = 5000; i>0; i--);               // Do something unproductive to create noticeable time in between blinks (Delay)
-    __bis_SR_register(LPM3_bits + GIE);     // Enter LPM3
-  }
+    WDTCTL = WDTPW + WDTHOLD;       //disable WDT
+    BCSCTL1 = CALBC1_1MHZ;
+    DCOCTL = CALDCO_1MHZ;
+    P1DIR = 0xFF;                   // All P1.x outputs set to 1
+    P1OUT = 0;                      // All P1.x reset to 0
+    P2DIR = 0xFF;                   // All P2.x outputs set to 1
+    P2OUT = 0;                      // All P2.x reset to 0
+    while(1){
+        P1OUT ^= 0x01;              // Set P1.0 LED on
+        __delay_cycles(500000);     // Do something unproductive to create noticeable time in between blinks (Delay)
+    }
 }
-
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector=WDT_VECTOR
-__interrupt void watchdog_timer (void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(WDT_VECTOR))) watchdog_timer (void)
-#else
-#error Compiler not supported!
-#endif
-{
-    __bic_SR_register_on_exit(LPM3_bits);   // Clear LPM3 bits from 0(SR)
-}
-
