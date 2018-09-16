@@ -73,6 +73,8 @@
 //Found in TI Resource Explorer
 //original name: msp430g2xx3_lpm3.c
 
+//TODO: make duty cycle 50% (symmetrical on and off)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 #include <msp430.h>
 
 int main(void)
@@ -89,11 +91,9 @@ int main(void)
   while(1)  //loop repeats forever
   {
     int i;                                  //integer needed for creating time in between blinks
-    P1OUT |= 0x01;                          // Set P1.0 LED on
-    for (i = 5000; i>0; i--);               // Do something unproductive to create noticable time in between blinks (Delay)
-    P1OUT &= ~0x01;                         // Reset P1.0 LED off
+    P1OUT ^= 0x01;                          // Set P1.0 LED on
+    for (i = 5000; i>0; i--);               // Do something unproductive to create noticeable time in between blinks (Delay)
     __bis_SR_register(LPM3_bits + GIE);     // Enter LPM3
-    for (i = 5000; i>0; i--);               // Do something unproductive to create noticable time in between blinks (Delay)
   }
 }
 
@@ -108,3 +108,4 @@ void __attribute__ ((interrupt(WDT_VECTOR))) watchdog_timer (void)
 {
     __bic_SR_register_on_exit(LPM3_bits);   // Clear LPM3 bits from 0(SR)
 }
+
