@@ -1,0 +1,6 @@
+.*
+!.gitignore
+
+targetConfigs
+lnk_msp430g2553.cmd
+Debug

@@ -69,18 +69,24 @@
 
 
 
+//David Sheppard
+//16 September 2018
+//Lab 1: Simple Blink for MSP430G2553
+//Purpose: Blinks LED light on an off at desired frequency. Blinking is symmetrical (time on = time off)
+//Notes:
+//  Adapted from code found in TI Resource Explorer
+//  Original name: msp430g2xx3_lpm3.c
+//  Changes made: disabled WDT, made blinking synchronous (LED time on = LED time off)
 
-//Adapted from code found in TI Resource Explorer
-//original name: msp430g2xx3_lpm3.c
-//changes made: disabled WDT, made blinking synchronous (LED time on = LED time off)
+
 
 #include <msp430.h>         //include header file for this launchpad family
 
-int main(void)
+int main(void)  //begin main function
 {
     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
-    BCSCTL1 = CALBC1_1MHZ;          //
-    DCOCTL = CALDCO_1MHZ;
+    BCSCTL1 = CALBC1_1MHZ;          //set clock to run at 1 MHz ("BCSCTL" = Basic Clock System Control)
+    DCOCTL = CALDCO_1MHZ;           //set other clock to run at 1 MHz ("DCOCTL" = Digitally Controlled Oscillator Control)
     P1DIR = 0xFF;                   // All P1.x outputs set to 1
     P1OUT = 0;                      // All P1.x reset to 0
     P2DIR = 0xFF;                   // All P2.x outputs set to 1
