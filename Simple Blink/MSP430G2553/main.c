@@ -95,4 +95,6 @@ int main(void)  //begin main function
         P1OUT ^= 0x01;              // Invert value of P1OUT (the LED)
         __delay_cycles(500000);     // Set delay to 1/2 second (LED is on for 1/2 second and then off for 1/2 second)
     }
+
+    return 0;
 }
