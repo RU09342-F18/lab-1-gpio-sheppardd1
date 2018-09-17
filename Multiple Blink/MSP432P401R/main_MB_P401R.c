@@ -27,7 +27,7 @@ int main(void)  //begin main function
     while(1){
         P1OUT ^= 0x01;              // Invert value of P1OUT Pin 6 only (red LED)
         __delay_cycles(250000);     // Set delay to 1/4 second
-        P1OUT ^= 0x01;              //Invert P1OUT Pins 6 and 0 (red and green LEDs)
+        P2OUT ^= 0x04;              //Invert P1OUT Pins 6 and 0 (red and green LEDs)
         __delay_cycles(250000);     //add another 1/4 second delay
     }
 
