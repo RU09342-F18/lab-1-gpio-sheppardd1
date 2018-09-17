@@ -84,7 +84,7 @@
 
 int main(void)  //begin main function
 {
-    PM5CTL0 &= ~LOCKLPM5;
+    PM5CTL0 &= ~LOCKLPM5;           //NEEDED FOR ALL FR BOARDS - takes out of low power mode and ensures correct programming
     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
 //    BCSCTL1 = CALBC1_1MHZ;          //set clock to run at 1 MHz ("BCSCTL" = Basic Clock System Control)
 //    DCOCTL = CALDCO_1MHZ;           //set other clock to run at 1 MHz ("DCOCTL" = Digitally Controlled Oscillator Control)
