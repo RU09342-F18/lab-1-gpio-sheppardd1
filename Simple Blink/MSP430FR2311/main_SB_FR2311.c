@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD_EX
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2012, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,67 +43,59 @@
  *
  * --/COPYRIGHT--*/
 //******************************************************************************
-//  MSP430FR231x Demo - Enters LPM3 with ACLK = XT1CLK = 32768Hz.
+//  MSP430G2xx3 Demo - Basic Clock, LPM3 Using WDT ISR, 32kHz ACLK
 //
-//  Description: Configures ACLK to be sourced from XT1 crystal. Enter LPM3 until
-//               WDT ISR is executed and toggles the LED on P1.0.
+//  Description: This program operates MSP430 normally in LPM3, pulsing P1.0
+//  at 4 second intervals. WDT ISR used to wake-up system. All I/O configured
+//  as low outputs to eliminate floating inputs. Current consumption does
+//  increase when LED is powered on P1.0. Demo for measuring LPM3 current.
+//  ACLK = LFXT1/4 = 32768/4, MCLK = SMCLK = default DCO ~ 800kHz
+//  //* External watch crystal installed on XIN XOUT is required for ACLK *//
 //
-//           MSP430FR2311
+//
+//           MSP430G2xx3
 //         ---------------
-//     /|\|               |
-//      | |               |
-//      | |      XIN(P2.7)|--
-//      --|RST            |  ~32768Hz
-//        |     XOUT(P2.6)|--
+//     /|\|            XIN|-
+//      | |               | 32kHz
+//      --|RST        XOUT|-
 //        |               |
 //        |           P1.0|-->LED
 //
-//   Darren Lu
-//   Texas Instruments Inc.
-//   July 2015
-//   Built with IAR Embedded Workbench v6.30 & Code Composer Studio v6.1
+//  D. Dang
+//  Texas Instruments Inc.
+//  December 2010
+//   Built with CCS Version 4.2.0 and IAR Embedded Workbench Version: 5.10
 //******************************************************************************
-#include <msp430.h>
 
-int main(void)
+
+
+//David Sheppard
+//16 September 2018
+//Lab 1: Simple Blink for MSP430G2553
+//Purpose: Blinks LED light on an off at desired frequency. Blinking is symmetrical (time on = time off)
+//Notes:
+//  Adapted from code found in TI Resource Explorer
+//  Original name: msp430g2xx3_lpm3.c
+//  Changes made: disabled WDT, made blinking synchronous (LED time on = LED time off)
+
+
+
+#include <msp430.h>         //include header file for this launchpad family
+
+int main(void)  //begin main function
 {
-    WDTCTL = WDT_ADLY_1000;                 // WDT 1000ms, ACLK, interval timer
-
-    SFRIE1 |= WDTIE;                        // Enable WDT interrupt
-
-    P2SEL1 |= BIT6 + BIT7;                  // P2.0: XOUT; P2.1: XI1
-
-    CSCTL4 = SELMS__DCOCLKDIV | SELA__XT1CLK;  // MCLK=SMCLK=DCO; ACLK=XT1
-
-    // Port Configuration all un-used pins to output low
-    P1OUT = 0x00;
-    P2OUT = 0x00;
-    P1DIR = 0xff;
-    P2DIR = 0xff;
-
-    // Disable the GPIO power-on default high-impedance mode
-    // to activate previously configured port settings
     PM5CTL0 &= ~LOCKLPM5;
+    WDTCTL = WDTPW + WDTHOLD;       //disable WDT
+//    BCSCTL1 = CALBC1_1MHZ;          //set clock to run at 1 MHz ("BCSCTL" = Basic Clock System Control)
+//    DCOCTL = CALDCO_1MHZ;           //set other clock to run at 1 MHz ("DCOCTL" = Digitally Controlled Oscillator Control)
+    P1DIR = 0xFF;                   // All P1.x outputs set to 1
+    P1OUT = 0;                      // All P1.x reset to 0
+    P2DIR = 0xFF;                   // All P2.x outputs set to 1
+    P2OUT = 0;                      // All P2.x reset to 0
+    while(1){
+        P1OUT ^= 0x01;              // Invert value of P1.0 (the green LED)
+        __delay_cycles(500000);     // Set delay to 1/2 second (LED is on for 1/2 second and then off for 1/2 second)
+    }
 
-    do
-    {
-        CSCTL7 &= ~(XT1OFFG | DCOFFG);      // Clear XT1 and DCO fault flag
-        SFRIFG1 &= ~OFIFG;
-    }while (SFRIFG1 & OFIFG);               // Test oscillator fault flag
-
-    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3
-    __no_operation();                       // For debug
-}
-
-// Watchdog Timer interrupt service routine
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector=WDT_VECTOR
-__interrupt void WDT_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(WDT_VECTOR))) WDT_ISR (void)
-#else
-#error Compiler not supported!
-#endif
-{
-    P1OUT ^= BIT0;                          // Toggle P1.0 (LED) every 1s
+    return 0;
 }
