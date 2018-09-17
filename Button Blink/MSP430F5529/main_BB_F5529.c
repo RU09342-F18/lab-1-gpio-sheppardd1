@@ -71,7 +71,7 @@
 //16 September 2018
 //Lab 1: Button Blink for MSP430F5529
 //Allows user to control LEDs using the pin 3 button
-
+/*
 #include <msp430F5529.h>
 
 #define LED0 BIT0   //defining LED0 as BIT0
@@ -84,7 +84,7 @@ int main(void)  //begin main function
 {
     WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
     P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
-    // P1.3 must stay at input
+    // P1. must stay at input
     P1OUT &= ~(LED0 + LED1); // set P1.0 to 0 (LED OFF)
     P1IE |= BUTTON; // P1.3 interrupt enabled
 
@@ -106,4 +106,29 @@ P1IES ^= BUTTON; // toggle the interrupt edge,
 // the interrupt vector will be called
 // when P1.3 goes from HitoLow as well as
 // LowtoHigh
+}*/
+
+
+
+#include <msp430F5529.h>
+
+#define BUTTON BIT1
+
+int main(void){
+
+     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
+     P1DIR = 0xFF;                   // All P1.x outputs set to 1
+     P1OUT = 0;                      // All P1.x reset to 0
+     P1REN = BUTTON;                  //setup resistor (resistor enable)
+     P1DIR |= ~BUTTON;              //set P1 to output at BIT1
+     P1OUT |= BUTTON;               //set output to Button
+
+
+while(1){
+    if((P1IN & BUTTON) == 0x00){
+        P1OUT ^= BIT0;              //toggle button
+        __delay_cycles(5000);       //without this, user needs to press button infinitely fast
+    }
+}
+return 0;
 }
