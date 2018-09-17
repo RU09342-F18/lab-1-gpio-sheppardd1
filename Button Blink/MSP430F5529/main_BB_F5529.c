@@ -69,7 +69,7 @@
 
 //David Sheppard
 //16 September 2018
-//Lab 1: Button Blink for MSP430G2553
+//Lab 1: Button Blink for MSP430F5529
 //Allows user to control LEDs using the pin 3 button
 
 #include <msp430F5529.h>

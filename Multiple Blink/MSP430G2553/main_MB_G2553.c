@@ -1,7 +1,7 @@
 
 //David Sheppard
 //16 September 2018
-//Lab 1: Simple Blink for MSP430G2553
+//Lab 1: Multiple Blink for MSP430G2553
 //Purpose: Blinks LED light on an off at desired frequency. Blinking is symmetrical (time on = time off)
 //Notes:
 //  Adapted from code found in TI Resource Explorer
