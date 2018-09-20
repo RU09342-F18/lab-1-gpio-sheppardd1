@@ -13,6 +13,7 @@
 #include <msp430F5529.h>
 
 #define BUTTON BIT1
+#define LED BIT0
 
 int main(void){
 
@@ -26,7 +27,7 @@ int main(void){
 
      while(1){                              //infinite loop; always check the following if statement every time While loop completes
          if((P1IN & BUTTON) == 0x00){       //c
-             P1OUT ^= BIT0;                 //toggle LED
+             P1OUT ^= LED;                 //toggle LED
              __delay_cycles(300000);        //create delay
              //without this delay, button shake would cause unpredictable behavior. This gives the user time to let go of button.
              //As a side effect of button shake, if user holds down button for longer than 300000 clock cycles, led will blink on and off repeatedly
