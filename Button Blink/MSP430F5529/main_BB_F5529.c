@@ -2,6 +2,8 @@
 
 //David Sheppard
 //16 September 2018
+//Modified 20 September 2018 - code cleaned up, delay adjusted, comments added
+
 //Lab 1: Button Blink for MSP430F5529
 //Allows user to control LEDs using the pin 3 button
 //Hitting the button (P1.1) toggles the red LED (P1.0)
