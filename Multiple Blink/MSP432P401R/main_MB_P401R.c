@@ -14,14 +14,14 @@
 int main(void)  //begin main function
 {
     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
-    //BCSCTL1 = CALBC1_1MHZ;          //set clock to run at 1 MHz ("BCSCTL" = Basic Clock System Control)
-    //DCOCTL = CALDCO_1MHZ;           //set other clock to run at 1 MHz ("DCOCTL" = Digitally Controlled Oscillator Control)
+    //BCSCTL1 = CALBC1_1MHZ;        //set clock to run at 1 MHz ("BCSCTL" = Basic Clock System Control)
+    //DCOCTL = CALDCO_1MHZ;         //set other clock to run at 1 MHz ("DCOCTL" = Digitally Controlled Oscillator Control)
     P1DIR = 0xFF;                   // All P1.x outputs set to 1
     P1OUT = 0;                      // All P1.x reset to 0
     P2DIR = 0xFF;                   // All P2.x outputs set to 1
     P2OUT = 0;                      // All P2.x reset to 0
-    //P1SEL &= ~0x01;                 //set first MUX select bit to 0 in order to set P1.0 as an output
-    //P1SEL2 &= !0x01;                //set second MUX select bit to 0 in order to set P1.0 as an output
+    //P1SEL &= ~0x01;               //set first MUX select bit to 0 in order to set P1.0 as an output
+    //P1SEL2 &= !0x01;              //set second MUX select bit to 0 in order to set P1.0 as an output
 
     while(1){                       //infinite loop
         P1OUT ^= 0x01;              // Invert value of P1 LED only
