@@ -1,113 +1,11 @@
-/* --COPYRIGHT--,BSD_EX
- * Copyright (c) 2012, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *******************************************************************************
- *
- *                       MSP430 CODE EXAMPLE DISCLAIMER
- *
- * MSP430 code examples are self-contained low-level programs that typically
- * demonstrate a single peripheral function or device feature in a highly
- * concise manner. For this the code may rely on the device's power-on default
- * register values and settings such as the clock configuration and care must
- * be taken when combining code from several examples to avoid potential side
- * effects. Also see www.ti.com/grace for a GUI- and www.ti.com/msp430ware
- * for an API functional library-approach to peripheral configuration.
- *
- * --/COPYRIGHT--*/
-//***************************************************************************************
-// MSP430 PushButton that toggles LED at P1.0 On and OFF
-//
-// Description; PushButton in P1.3 through interrupt turns on and off the LED in P1.0
-// By changing the P1.3 interrupt edge, the interrupt is called every time the button
-// is pushed and pulled; toggling the LED everytime.
-// ACLK = n/a, MCLK = SMCLK = default DCO
-//
-// MSP430x2xx
-// -----------------
-// /|\| XIN|-
-// | | |
-// --|RST XOUT|-
-// | |
-// | P1.0|-->LED
-//
-// Aldo Briano
-// Texas Instruments, Inc
-// June 2010
-// Built with Code Composer Studio v4
-//***************************************************************************************
-
-
-//Taken from: http://processors.wiki.ti.com/index.php/MSP430_LaunchPad_PushButton
+//Written with much help from Nick K. (LA)
 
 //David Sheppard
 //16 September 2018
 //Lab 1: Button Blink for MSP430F5529
 //Allows user to control LEDs using the pin 3 button
-/*
-#include <msp430F5529.h>
-
-#define LED0 BIT0   //defining LED0 as BIT0
-#define LED1 BIT6   //defining LED1 as BIT6
-#define BUTTON BIT0 //defining BUTTON as BIT3
-
-
-
-int main(void)  //begin main function
-{
-    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
-    P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
-    // P1. must stay at input
-    P1OUT &= ~(LED0 + LED1); // set P1.0 to 0 (LED OFF)
-    P1IE |= BUTTON; // P1.3 interrupt enabled
-
-    P1IFG &= ~BUTTON; // P1.3 IFG cleared
-
-    __enable_interrupt(); // enable all interrupts
-    for(;;)
-    {}
-}
-
-
-// Port 1 interrupt service routine
-#pragma vector=PORT1_VECTOR
-__interrupt void Port_1(void)
-{
-P1OUT ^= (LED0 + LED1); // P1.0 = toggle
-P1IFG &= ~BUTTON; // P1.3 IFG cleared
-P1IES ^= BUTTON; // toggle the interrupt edge,
-// the interrupt vector will be called
-// when P1.3 goes from HitoLow as well as
-// LowtoHigh
-}*/
-
+//Hitting the button (P1.1) toggles the red LED (P1.0)
+//If button is held for over 300000 clock cycles, LED blinks on and off repeatedly
 
 
 #include <msp430F5529.h>
@@ -116,19 +14,21 @@ P1IES ^= BUTTON; // toggle the interrupt edge,
 
 int main(void){
 
-     WDTCTL = WDTPW + WDTHOLD;       //disable WDT
-     P1DIR = 0xFF;                   // All P1.x outputs set to 1
+     WDTCTL = WDTPW + WDTHOLD;       //disable WDT (lets us have infinite loops)
+     P1DIR = 0xFF;                   // All P1.x directions set to 1 (in order to be outputs
      P1OUT = 0;                      // All P1.x reset to 0
      P1REN = BUTTON;                  //setup resistor (resistor enable)
-     P1DIR |= ~BUTTON;              //set P1 to output at BIT1
+     P1DIR |= ~BUTTON;              //set P1.1 to be an input (unlike all other P1.x pins)
      P1OUT |= BUTTON;               //set output to Button
 
 
-while(1){
-    if((P1IN & BUTTON) == 0x00){
-        P1OUT ^= BIT0;              //toggle button
-        __delay_cycles(5000);       //without this, user needs to press button infinitely fast
-    }
-}
+     while(1){                              //infinite loop; always check the following if statement every time While loop completes
+         if((P1IN & BUTTON) == 0x00){       //c
+             P1OUT ^= BIT0;                 //toggle LED
+             __delay_cycles(300000);        //create delay
+             //without this delay, button shake would cause unpredictable behavior. This gives the user time to let go of button.
+             //As a side effect of button shake, if user holds down button for longer than 300000 clock cycles, led will blink on and off repeatedly
+         }
+     }
 return 0;
 }
