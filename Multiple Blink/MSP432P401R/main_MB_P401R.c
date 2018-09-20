@@ -23,12 +23,12 @@ int main(void)  //begin main function
     //P1SEL &= ~0x01;                 //set first MUX select bit to 0 in order to set P1.0 as an output
     //P1SEL2 &= !0x01;                //set second MUX select bit to 0 in order to set P1.0 as an output
 
-    //P1.0 has a delay of 1/2 second and P1.6 has a delay of 1/4 second
-    while(1){
-        P1OUT ^= 0x01;              // Invert value of P1OUT Pin 6 only (red LED)
-        __delay_cycles(250000);     // Set delay to 1/4 second
-        P2OUT ^= 0x04;              //Invert P1OUT Pins 6 and 0 (red and green LEDs)
-        __delay_cycles(250000);     //add another 1/4 second delay
+    while(1){                       //infinite loop
+        P1OUT ^= 0x01;              // Invert value of P1 LED only
+        __delay_cycles(300000);     // Set delay to 1/4 second
+        P2OUT ^= 0x01;              //Invert 21 LED...
+        P1OUT ^= 0x01;              //...and invert P1 LED
+        __delay_cycles(300000);     //add another 1/4 second delay
     }
 
     return 0;
