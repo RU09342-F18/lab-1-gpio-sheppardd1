@@ -70,7 +70,8 @@
 //David Sheppard
 //16 September 2018
 //Lab 1: Button Blink for MSP430G2553
-//Allows user to control LEDs using the pin 3 button
+//Allows user to control 2 LEDs using the pin 3 button
+//LEDs are on when button is held down, off when button is not held
 
 #include <msp430x20x2.h>
 
@@ -79,19 +80,18 @@
 #define BUTTON BIT3 //defining BUTTON as BIT3
 
 
-
 int main(void)  //begin main function
 {
     WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
     P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
-    // P1.3 must stay at input
+
     P1OUT &= ~(LED0 + LED1); // set P1.0 to 0 (LED OFF)
     P1IE |= BUTTON; // P1.3 interrupt enabled
 
     P1IFG &= ~BUTTON; // P1.3 IFG cleared
 
     __enable_interrupt(); // enable all interrupts
-    for(;;)
+    for(;;)                 //do nothing
     {}
 }
 
