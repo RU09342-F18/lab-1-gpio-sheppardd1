@@ -1,1 +1,1 @@
-![Label](GIF.jpg?raw=true "Title")
+![Label](GIF.GIF?raw=true "Title")
