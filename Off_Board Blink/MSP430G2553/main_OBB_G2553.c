@@ -91,7 +91,7 @@ int main(void)  //begin main function
     P1OUT = 0;                      // All P1.x reset to 0
     P2DIR = 0xFF;                   // All P2.x outputs set to 1
     P2OUT = 0;                      // All P2.x reset to 0
-    while(1){
+    while(1){                       //infinite loop
         P1OUT ^= 0x20;              // Invert value of P1OUT Pin 5 only (red LED)
         __delay_cycles(250000);     // Set delay to 1/4 second
         P1OUT ^= 0x21;              //Invert P1OUT Pins 5 and 0 (red and green LEDs)
