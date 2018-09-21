@@ -12,3 +12,5 @@ The microprocessor is programmed and then removed from the board and placed onto
 ## Demo
 The demo below shows the circuit running and the reset switch being pressed twice. The file can be found in video format at https://drive.google.com/file/d/1gjwNIF5b_0l1aHeVIs4melQUvIx8G14g/view?usp=sharing
 ![Label](GIF.GIF?raw=true "Title")
+## Notes
+The code is dependent upon the <msp430.h> library at a minimum.
