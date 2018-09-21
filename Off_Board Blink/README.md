@@ -29,4 +29,4 @@ The microprocessor controls 6 LEDs which blink to count in biary from 000000 to 
 - Reset circuitry consists of a switch, a 1 nF capacitor, and a 47 kOhm resistor
 ## Demo
 The demo below shows the circuit running through all possible 6-bit numbers. A video of the demo can be found at the following link: 
-![Label2](GIF2.GIF?raw=true "Title2"
+![Label](GIF2.GIF?raw=true "Title2"
