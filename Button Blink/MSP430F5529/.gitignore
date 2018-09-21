@@ -2,5 +2,5 @@
 !.gitignore
 
 targetConfigs
-lnk_msp*
+lnk_msp430f5529
 Debug
