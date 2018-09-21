@@ -1,8 +1,8 @@
 # Button Blink
-Created by David Sheppard
-16 September 2018
-Last Modified: 20 September 2018 - cleaned up code, adjusted delay, commented.
-Written with much help from Nick K.
+- Created by David Sheppard
+- 16 September 2018
+- Last Modified: 20 September 2018 - cleaned up code, adjusted delay, commented.
+- Written with much help from Nick K.
 ## Purpose
 Allows the user to control an LED(s) with a button on the development board.
 ## Implemen7ations
