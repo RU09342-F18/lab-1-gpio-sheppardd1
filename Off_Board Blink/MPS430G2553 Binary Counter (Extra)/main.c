@@ -97,42 +97,43 @@ int main(void)  //begin main function
     P1DIR = 0xFF;                   // All P1.x outputs set to 1
     P1OUT = 0;                      // All P1.x reset to 0
 
-    const long delay = 200000;
+    const long delay = 200000;  //delay time
 
     int i = 1;  //the number displayed
-    float divisor = i;
-    P1OUT &= ~0x3F;
+    float divisor = i;  //used for checking divisibility
+    P1OUT &= ~0x3F; //clear outs (set to 0)
     while(1){                       //infinite loop
-        P1OUT ^= LED0;
-        if((i / 2 == divisor / 2) && i != 0)
+        P1OUT ^= LED0;  //invert 1st LED
+        //checking divisibility by comparing float division with integer division
+        if((i / 2 == divisor / 2) && i != 0)    //if i is divisible by 2, invert 2nd led
         {
             P1OUT ^= LED1;
-            if((i / 4 == divisor / 4) && i != 0)
+            if((i / 4 == divisor / 4) && i != 0)//if i is divisible by 4, invert 3rd led
             {
                 P1OUT ^= LED2;
-                if((i / 8 == divisor / 8) && i != 0)
+                if((i / 8 == divisor / 8) && i != 0)//if i is divisible by 8, invert 4th led
                 {
                     P1OUT ^= LED3;
-                    if((i / 16 == divisor / 16) && i != 0)
+                    if((i / 16 == divisor / 16) && i != 0)//if i is divisible by 16, invert 5th led
                     {
                         P1OUT ^= LED4;
-                        if((i / 32 == divisor / 32) && i != 0)
+                        if((i / 32 == divisor / 32) && i != 0)//if i is divisible by 32, invert 6th led
                         {
                             P1OUT ^= LED5;
-                            __delay_cycles(250000);
+                            __delay_cycles(delay); //insert delay
                         }
-                        else __delay_cycles(delay);
-                    }else __delay_cycles(delay);
-                }else __delay_cycles(delay);
-            }else __delay_cycles(delay);
-        }else __delay_cycles(delay);
-        i++;
-        divisor = i;
-        if(i == 64){
-            P1OUT ^= 0x3F;
-            __delay_cycles(delay);
-            i = 1;
-            divisor = i;
+                        else __delay_cycles(delay);//insert delay
+                    }else __delay_cycles(delay);//insert delay
+                }else __delay_cycles(delay);//insert delay
+            }else __delay_cycles(delay);//insert delay
+        }else __delay_cycles(delay);//insert delay
+        i++;    //increment nubmer that is being displayed
+        divisor = i;    //set divisor to same as i
+        if(i == 64){    //if i is higher than max number that can be displayed(63), reset
+            P1OUT ^= 0x3F;  //clear all values in output
+            __delay_cycles(delay);  //delay
+            i = 1;  //reset i
+            divisor = i;    //reset divisor
         }
     }
 
